@@ -1,5 +1,9 @@
 name: Deploy Lambda
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -30,6 +34,6 @@ jobs:
 
       - name: Deploy Lambda
         run: |
-          npx ncc build index.ts
+          npx ncc build index.ts 
           zip -j deploy.zip ./dist/*
           # aws cli - deploy code
