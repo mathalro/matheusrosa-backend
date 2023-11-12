@@ -35,6 +35,6 @@ jobs:
       - name: Deploy Lambda
         working-directory: ./lambda
         run: |
-          npx ncc build index.ts 
+          npx ncc -d build index.ts
           zip -j deploy.zip ./dist/*
           # aws cli - deploy code

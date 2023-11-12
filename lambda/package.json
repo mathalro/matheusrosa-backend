@@ -14,7 +14,6 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.126",
     "@types/node": "^20.9.0",
-    "@vercel/ncc": "^0.38.1",
-    "typescript": "^5.2.2"
+    "@vercel/ncc": "^0.38.1"
   }
 }
