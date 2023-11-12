@@ -5,17 +5,17 @@ on:
     branches:
       - main
 
-  jobs:
-    deplopy_lambda:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: actions/setup-node@v2
-          with:
-            node-version: '12'
+jobs:
+  deplopy_lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
 
-        - name: npm install
-          env:
-            CI: true
-          run: |
-            npm ci
+      - name: npm install
+        env:
+          CI: true
+        run: |
+          npm ci
