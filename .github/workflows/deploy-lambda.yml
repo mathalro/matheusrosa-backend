@@ -1,4 +1,4 @@
-nane: Deploy Lambda
+name: Deploy Lambda
 
 on:
   push:
