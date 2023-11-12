@@ -38,4 +38,4 @@ jobs:
           ls
           npx ncc -d build index.ts
           zip -j deploy.zip ./dist/*
-          # aws cli - deploy code
+          aws lambda update-function-code --function-name=matheusrosa-application --zip-file=fileb://deploy.zip
