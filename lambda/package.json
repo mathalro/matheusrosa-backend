@@ -8,7 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.126",
     "@types/node": "^20.9.0",
