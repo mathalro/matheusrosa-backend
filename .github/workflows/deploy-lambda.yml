@@ -15,6 +15,7 @@ jobs:
           node-version: '12'
 
       - name: npm install
+        working-directory: ./lambda
         env:
           CI: true
         run: |
