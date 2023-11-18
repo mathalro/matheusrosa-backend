@@ -55,4 +55,6 @@ const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayPr
             response.body = JSON.stringify(body.Items);
         }
     }
+
+    return response;
 }
