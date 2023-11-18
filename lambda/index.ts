@@ -36,7 +36,11 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
 };
 
 const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    let response: APIGatewayProxyResult;
+    let response: APIGatewayProxyResult = {
+        statusCode: 200,
+        body: ""
+    };
+    
     let method = event.httpMethod.toLowerCase();
 
     logger.info(`Handling ${method} articles`);
