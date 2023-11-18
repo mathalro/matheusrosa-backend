@@ -10,7 +10,10 @@ const tableName = "articles";
 const logger = new Logger();
 
 export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    let response: APIGatewayProxyResult;
+    let response: APIGatewayProxyResult = {
+        statusCode: 200,
+        body: ""
+    };
 
     logger.info(`Received a new request: ${event.path}`);
     let module = "articles";
