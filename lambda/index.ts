@@ -40,7 +40,7 @@ const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayPr
         statusCode: 200,
         body: ""
     };
-    
+
     let method = event.httpMethod.toLowerCase();
 
     logger.info(`Handling ${method} articles`);
@@ -52,9 +52,7 @@ const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }));
 
             response.statusCode = 200;
-            response.body = body.Items.toString();
-            
-            return response;
+            response.body = JSON.stringify(body.Items);
         }
     }
 }
