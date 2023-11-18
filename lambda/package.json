@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-lambda-powertools/logger": "^1.16.0",
     "@aws-sdk/client-dynamodb": "^3.454.0",
     "@aws-sdk/lib-dynamodb": "^3.454.0",
     "typescript": "^5.2.2"

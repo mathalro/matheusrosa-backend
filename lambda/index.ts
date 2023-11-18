@@ -1,13 +1,18 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { Logger } from '@aws-lambda-powertools/logger';
 
 const ddbClient = new DynamoDBClient({});
 const ddb = DynamoDBDocumentClient.from(ddbClient);
 const tableName = "articles";
 
+const logger = new Logger();
+
 export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let response: APIGatewayProxyResult;
+
+    logger.info(`Received a new request: ${event.path}`);
 
     let module = event.path.split("/").at(0);
 
@@ -20,6 +25,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 response.body = "Invalid Path";
         }
     } catch (err) {
+        logger.error(`Error processing request ${event.path}: ${err}`, err);
         response.statusCode = 500;
         response.body = "Unexpected Error";
     }
@@ -30,6 +36,8 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
 const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let response: APIGatewayProxyResult;
     let method = event.httpMethod.toLowerCase();
+
+    logger.info(`Handling ${method} articles`);
 
     switch (method) {
         case "get": {
