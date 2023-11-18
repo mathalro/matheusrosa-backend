@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 const ddbClient = new DynamoDBClient({});
@@ -52,7 +53,9 @@ const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }));
 
             response.statusCode = 200;
-            response.body = JSON.stringify(body.Items);
+
+            let normalJson = body.Items.map(i => unmarshall(i));
+            response.body = JSON.stringify(normalJson);
         }
     }
 
