@@ -13,8 +13,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     let response: APIGatewayProxyResult;
 
     logger.info(`Received a new request: ${event.path}`);
-
-    let module = event.path.split("/").at(0);
+    let module = "articles";
 
     try {
         switch (module) {
@@ -25,7 +24,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
                 response.body = "Invalid Path";
         }
     } catch (err) {
-        logger.error(`Error processing request ${event.path}: ${err}`, err);
+        logger.error(`Error processing request ${event.path}: ${err}`, err); 
         response.statusCode = 500;
         response.body = "Unexpected Error";
     }
