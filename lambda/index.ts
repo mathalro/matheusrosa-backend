@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, ScanCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { unmarshall, marshall } from '@aws-sdk/util-dynamodb';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 const ddbClient = new DynamoDBClient({});
@@ -56,6 +56,21 @@ const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
             let normalJson = body.Items.map(i => unmarshall(i));
             response.body = JSON.stringify(normalJson);
+            
+            break;
+        };
+        case "post": {
+            let newItem = JSON.parse(event.body);
+            let item = marshall(newItem);
+
+            let command = new PutItemCommand( {
+                TableName: tableName,
+                Item: item
+            });
+
+            await ddb.send(command)
+
+            break;
         }
     }
 
