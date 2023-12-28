@@ -14,7 +14,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     let response: APIGatewayProxyResult = {
         statusCode: 200,
         body: ""
-    };
+    }; 
 
     logger.info(`Received a new request: ${event.path}`);
     let module = "articles";
