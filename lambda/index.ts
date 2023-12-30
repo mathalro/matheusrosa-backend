@@ -97,6 +97,7 @@ async function putDataInTable(event: APIGatewayProxyEvent, tableName: string) {
 }
 
 async function getDataFromTable(tableName: string, response: APIGatewayProxyResult) {
+    logger.info(`Retrieving data from ${tableName}`);
     let body = await ddb.send(new ScanCommand({
         TableName: tableName
     }));
