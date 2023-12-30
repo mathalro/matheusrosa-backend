@@ -22,7 +22,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
         switch (module) {
             case "articles":
                 return articlesHandler(event); 
-            case "user":
+            case "users":
                 return usersHandler(event);
             default:
                 response.statusCode = 404;
