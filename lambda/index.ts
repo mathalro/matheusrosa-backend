@@ -21,7 +21,7 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     try {
         switch (module) {
             case "articles":
-                return articlesHandler(event); 
+                return articlesHandler(event);
             case "users":
                 return usersHandler(event);
             default:
@@ -102,6 +102,8 @@ async function getDataFromTable(tableName: string, response: APIGatewayProxyResu
     }));
 
     response.statusCode = 200;
+
+    logger.info(`Retrieved data: ${body}`);
 
     let normalJson = body.Items.map(i => unmarshall(i));
     response.body = JSON.stringify(normalJson);
