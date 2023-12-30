@@ -6,7 +6,6 @@ import { Logger } from '@aws-lambda-powertools/logger';
 
 const ddbClient = new DynamoDBClient({});
 const ddb = DynamoDBDocumentClient.from(ddbClient);
-const tableName = "articles";
 
 const logger = new Logger();
 
@@ -17,12 +16,14 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     }; 
 
     logger.info(`Received a new request: ${event.path}`);
-    let module = "articles";
+    let module = event.path.split("/")[1];
 
     try {
         switch (module) {
             case "articles":
                 return articlesHandler(event); 
+            case "user":
+                return usersHandler(event);
             default:
                 response.statusCode = 404;
                 response.body = "Invalid Path";
@@ -36,43 +37,72 @@ export const handler: Handler = async (event: APIGatewayProxyEvent): Promise<API
     return response;
 };
 
-const articlesHandler = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    let response: APIGatewayProxyResult = {
-        statusCode: 200,
-        body: ""
-    };
-
+const articlesHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    let response: APIGatewayProxyResult = defaultResponse;
     let method = event.httpMethod.toLowerCase();
+    const tableName = "articles";
 
     logger.info(`Handling ${method} articles`);
 
     switch (method) {
         case "get": {
-            let body = await ddb.send(new ScanCommand( {
-                TableName: tableName
-            }));
-
-            response.statusCode = 200;
-
-            let normalJson = body.Items.map(i => unmarshall(i));
-            response.body = JSON.stringify(normalJson);
-            
+            await getDataFromTable(tableName, response);
             break;
         };
         case "post": {
-            let newItem = JSON.parse(event.body);
-            let item = marshall(newItem);
-
-            let command = new PutItemCommand( {
-                TableName: tableName,
-                Item: item
-            });
-
-            await ddb.send(command)
-
+            await putDataInTable(event, tableName);
             break;
         }
     }
 
     return response;
+}
+
+const usersHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    let response: APIGatewayProxyResult = defaultResponse;
+    let method = event.httpMethod.toLowerCase();
+    const tableName = "users";
+
+    logger.info(`Handing ${method} users`);
+
+    switch (method) {
+        case "get": {
+            getDataFromTable(tableName, response);
+            break;
+        };
+        case "post": {
+            await putDataInTable(event, tableName);
+            break;
+        }
+    }
+
+    return response;
+}
+
+const defaultResponse = {
+    statusCode: 200,
+    body: ""
+};
+
+async function putDataInTable(event: APIGatewayProxyEvent, tableName: string) {
+    let newItem = JSON.parse(event.body);
+    let item = marshall(newItem);
+
+    let command = new PutItemCommand({
+        TableName: tableName,
+        Item: item
+    });
+
+    await ddb.send(command);
+}
+
+async function getDataFromTable(tableName: string, response: APIGatewayProxyResult) {
+    let body = await ddb.send(new ScanCommand({
+        TableName: tableName
+    }));
+
+    response.statusCode = 200;
+
+    let normalJson = body.Items.map(i => unmarshall(i));
+    response.body = JSON.stringify(normalJson);
 }
